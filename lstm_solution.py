@@ -10,9 +10,9 @@ from tensorflow.keras.layers import LSTM, Dense, Embedding
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 
-# ---------------------------------------------------------
+
 # 1. CONFIGURATION
-# ---------------------------------------------------------
+
 URL = "https://www.gutenberg.org/files/100/100-0.txt"
 FILE_PATH = "shakespeare.txt"
 SEQ_LENGTH = 40
@@ -28,9 +28,9 @@ tf.random.set_seed(42)
 np.random.seed(42)
 random.seed(42)
 
-# ---------------------------------------------------------
+
 # 2. DATA LOADING & PREPROCESSING
-# ---------------------------------------------------------
+
 def download_data(url, file_path):
     """Downloads the dataset if it doesn't exist."""
     if not os.path.exists(file_path):
@@ -102,9 +102,9 @@ def create_sequences(text, seq_length, step):
         
     return X, y, char_indices, indices_char, vocab_size
 
-# ---------------------------------------------------------
+
 # 3. MODEL BUILDING
-# ---------------------------------------------------------
+
 def build_model(vocab_size, seq_length, embedding_dim, lstm_units):
     """Builds the LSTM model."""
     model = Sequential([
@@ -117,9 +117,9 @@ def build_model(vocab_size, seq_length, embedding_dim, lstm_units):
     model.compile(loss='sparse_categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
     return model
 
-# ---------------------------------------------------------
+
 # 4. TRAINING
-# ---------------------------------------------------------
+
 def train_model(model, X, y):
     """Trains the model with EarlyStopping and Checkpoint."""
     
@@ -167,9 +167,9 @@ def plot_history(history):
     print("Training history plot saved as 'training_history.png'")
     # plt.show() # Uncomment if running in a notebook environment
 
-# ---------------------------------------------------------
+
 # 5. TEXT GENERATION
-# ---------------------------------------------------------
+
 def generate_text(model, seed_text, length, char_indices, indices_char, seq_length):
     """Generates text given a seed."""
     
@@ -183,8 +183,6 @@ def generate_text(model, seed_text, length, char_indices, indices_char, seq_leng
     # If seed is longer, take last seq_length
     # If seed is shorter, we can't easily predict without padding, but let's assume we just start filling.
     # However, the model expects fixed input length.
-    # We will pad with spaces (or a specific token) if too short, or just assume the user provides enough context.
-    # For robustness, let's pad with space indices.
     
     current_sequence = clean_seed
     
@@ -223,18 +221,10 @@ def generate_text(model, seed_text, length, char_indices, indices_char, seq_leng
         
     return generated
 
-# ---------------------------------------------------------
-# 6. BONUS: EXPERIMENT
-# ---------------------------------------------------------
-# Experiment: Increasing LSTM units or adding layers.
-# The current model uses 256 units. 
-# A larger model (e.g., 512 units or 2 layers) could capture more complex patterns 
-# but would take longer to train and might overfit on small data.
-# For this script, we stick to the requested 256 units single layer as the primary solution.
 
-# ---------------------------------------------------------
+
 # MAIN EXECUTION
-# ---------------------------------------------------------
+
 if __name__ == "__main__":
     # 1. Download
     download_data(URL, FILE_PATH)
